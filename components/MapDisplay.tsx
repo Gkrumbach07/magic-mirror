@@ -36,5 +36,9 @@ export default function MapDisplay({ lat, lon }: { lat: number; lon: number }) {
 		}
 	}, [lat, lon])
 
-	return <div ref={mapContainer} className="w-full h-[300px] rounded-lg overflow-hidden opacity-75" />
+	return (
+		<div className="max-w-5xl mx-auto">
+			<div ref={mapContainer} className="w-full h-[200px] rounded-2xl overflow-hidden opacity-75" />
+		</div>
+	)
 } 

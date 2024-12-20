@@ -1,3 +1,4 @@
+import React from 'react'
 import { Droplets, Snowflake, Thermometer } from "lucide-react"
 import type { WeatherData } from "@/lib/weather"
 

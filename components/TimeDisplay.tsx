@@ -9,18 +9,18 @@ export default function TimeDisplay() {
 	useEffect(() => {
 		const timer = setInterval(() => {
 			setCurrentTime(new Date())
-		}, 60000)
+		}, 1000)
 
 		return () => clearInterval(timer)
 	}, [])
 
 	return (
-		<div className="text-center space-y-2 sm:space-y-4">
-			<h1 className="text-6xl sm:text-7xl md:text-8xl font-bold tracking-tighter">
-				{format(currentTime, "HH:mm")}
+		<div className="space-y-1">
+			<h1 className="text-4xl font-bold tracking-tighter">
+				{format(currentTime, "hh:mm a")}
 			</h1>
-			<p className="text-2xl sm:text-3xl md:text-4xl text-muted-foreground">
-				{format(currentTime, "EEEE, MMMM do, yyyy")}
+			<p className="text-sm text-muted-foreground">
+				{format(currentTime, "EEEE, MMMM do")}
 			</p>
 		</div>
 	)

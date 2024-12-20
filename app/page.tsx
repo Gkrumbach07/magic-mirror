@@ -18,11 +18,16 @@ export default async function Home() {
   const weather = await getWeather()
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-background text-foreground py-8 sm:py-12">
-      <TimeDisplay />
-      <div className="w-full px-8 space-y-8">
-        <WeatherMap lat={MADISON_COORDS.lat} lon={MADISON_COORDS.lon} />
+    <main className="relative min-h-screen bg-background text-foreground">
+      {/* Top Bar */}
+      <div className="flex justify-between items-start p-8">
+        <TimeDisplay />
         <WeatherDisplay weather={weather} />
+      </div>
+
+      {/* Bottom Map */}
+      <div className="absolute bottom-0 left-0 right-0 px-8 pb-8">
+        <WeatherMap lat={MADISON_COORDS.lat} lon={MADISON_COORDS.lon} />
       </div>
     </main>
   )

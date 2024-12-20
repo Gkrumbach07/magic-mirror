@@ -55,10 +55,7 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
 	const res = await fetch(
 		`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${process.env.WEATHER_API_KEY}`,
 		{
-			next: {
-				revalidate: 300, // Cache for 5 minutes
-				tags: ['weather']
-			}
+			cache: 'no-store'
 		}
 	)
 
