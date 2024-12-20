@@ -1,44 +1,55 @@
 "use client"
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 export default function MapDisplay({ lat, lon }: { lat: number; lon: number }) {
 	const mapContainer = useRef<HTMLDivElement>(null)
 	const map = useRef<maplibregl.Map | null>(null)
-	const zoomLevels = [13, 12, 11, 10, 9]
-	const zoomIndex = useRef(3)
+	const [styleCache, setStyleCache] = useState<maplibregl.StyleSpecification | undefined>()
 
-	useEffect(() => {
+	const initMap = async () => {
 		const container = mapContainer.current
 		if (!container) return
 
-		fetch('/api/map-style')
-			.then(res => res.json())
-			.then(style => {
-				map.current = new maplibregl.Map({
-					container,
-					style,
-					center: [lon, lat],
-					zoom: zoomLevels[3],
-					interactive: false,
-					attributionControl: false,
-				})
+		// Clean up existing map if any
+		if (map.current) {
+			map.current.remove()
+			map.current = null
+		}
 
-				const cycleZoom = () => {
-					if (!map.current) return
-					zoomIndex.current = (zoomIndex.current + 1) % zoomLevels.length
-					map.current.easeTo({ zoom: zoomLevels[zoomIndex.current], duration: 2000 })
-				}
+		let style = styleCache
+		if (!style) {
+			style = await fetch('/api/map-style').then(res => res.json())
+			setStyleCache(style)
+		}
 
-				// const interval = setInterval(cycleZoom, 10000)
+		map.current = new maplibregl.Map({
+			container,
+			style,
+			center: [lon, lat],
+			zoom: 11,
+			interactive: false,
+			attributionControl: false,
+		})
+	}
 
-				return () => {
-					// clearInterval(interval)
-					map.current?.remove()
-				}
-			})
+	useEffect(() => {
+		initMap()
+
+		// Refresh map every 20 minutes
+		const refreshInterval = setInterval(() => {
+			initMap()
+		}, 20 * 60 * 1000)
+
+		return () => {
+			clearInterval(refreshInterval)
+			if (map.current) {
+				map.current.remove()
+				map.current = null
+			}
+		}
 	}, [lat, lon])
 
 	return (
