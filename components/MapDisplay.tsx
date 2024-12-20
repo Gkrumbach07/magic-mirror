@@ -8,7 +8,7 @@ export default function MapDisplay({ lat, lon }: { lat: number; lon: number }) {
 	const mapContainer = useRef<HTMLDivElement>(null)
 	const map = useRef<maplibregl.Map | null>(null)
 	const zoomLevels = [13, 12, 11, 10, 9]
-	const zoomIndex = useRef(0)
+	const zoomIndex = useRef(3)
 
 	useEffect(() => {
 		const container = mapContainer.current
@@ -21,7 +21,7 @@ export default function MapDisplay({ lat, lon }: { lat: number; lon: number }) {
 					container,
 					style,
 					center: [lon, lat],
-					zoom: zoomLevels[0],
+					zoom: zoomLevels[3],
 					interactive: false,
 					attributionControl: false,
 				})
@@ -32,10 +32,10 @@ export default function MapDisplay({ lat, lon }: { lat: number; lon: number }) {
 					map.current.easeTo({ zoom: zoomLevels[zoomIndex.current], duration: 2000 })
 				}
 
-				const interval = setInterval(cycleZoom, 10000)
+				// const interval = setInterval(cycleZoom, 10000)
 
 				return () => {
-					clearInterval(interval)
+					// clearInterval(interval)
 					map.current?.remove()
 				}
 			})
