@@ -32,7 +32,7 @@ export default function MapDisplay({ lat, lon }: { lat: number; lon: number }) {
 					map.current.easeTo({ zoom: zoomLevels[zoomIndex.current], duration: 2000 })
 				}
 
-				const interval = setInterval(cycleZoom, 5000)
+				const interval = setInterval(cycleZoom, 10000)
 
 				return () => {
 					clearInterval(interval)
